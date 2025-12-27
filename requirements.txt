@@ -1,0 +1,7 @@
+# Dipendenze obbligatorie
+openpyxl>=3.1.0
+pandas>=1.5.0
+
+# Dipendenze opzionali (per drag and drop)
+tkinterdnd2>=0.3.0  # Supporto drag & drop (opzionale)
+ttkbootstrap>=2.0.0  # Tema moderno UI (opzionale)
