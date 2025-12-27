@@ -15,7 +15,8 @@ except ImportError:
     DRAG_DROP_AVAILABLE = False
     print("⚠️ Attenzione: tkinterdnd2 non disponibile. Drag & Drop disabilitato.")
 
-if __name__ == "__main__":
+def main():
+    """Entry point dell'applicazione"""
     # Crea la finestra principale con o senza drag & drop
     if DRAG_DROP_AVAILABLE:
         root = TkinterDnD.Tk()
@@ -41,3 +42,6 @@ if __name__ == "__main__":
         messagebox.showerror("Errore Critico", 
                            f"Impossibile avviare l'applicazione:\n\n{str(e)}")
         sys.exit(1)
+
+if __name__ == "__main__":
+    main()
