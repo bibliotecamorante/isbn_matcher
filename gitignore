@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Excel temporanei
+~$*.xlsx
+~$*.xls
+
+# Output generati
+*_confronto_isbn.xlsx
+*_non_match_isbn.xlsx
