@@ -1,0 +1,17 @@
+# MANIFEST.in
+include README.md
+include LICENSE
+include requirements.txt
+include CHANGELOG.md
+
+# Se hai icone o risorse
+recursive-include isbn_matcher/assets *
+
+# Escludi file temporanei e cache
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *.so
+global-exclude .DS_Store
+global-exclude ~$*.xlsx
+global-exclude *.pyc
+global-exclude .git*
