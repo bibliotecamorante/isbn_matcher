@@ -6,6 +6,7 @@ import sys
 import tkinter as tk
 from tkinter import messagebox
 from gui import ISBNMatcherApp
+from localization import get_translations
 
 # Tentativo di importare tkinterdnd2 con fallback
 try:
@@ -28,19 +29,19 @@ def main():
         
         # Avvisa l'utente se manca il drag & drop
         if not DRAG_DROP_AVAILABLE:
+            # Usa le traduzioni dalla lingua corrente dell'app
+            t = get_translations(app.current_lang.get())
             root.after(1000, lambda: messagebox.showwarning(
-                "Funzionalità Limitata",
-                "⚠️ La libreria 'tkinterdnd2' non è installata.\n\n"
-                "Il drag & drop dei file non sarà disponibile.\n"
-                "Usa il pulsante '➕ Aggiungi File' per caricare i file.\n\n"
-                "Per abilitare il drag & drop, installa:\n"
-                "pip install tkinterdnd2"
+                t.warning_drag_drop_unavailable,
+                t.warning_drag_drop_message
             ))
         
         root.mainloop()
     except Exception as e:
-        messagebox.showerror("Errore Critico", 
-                           f"Impossibile avviare l'applicazione:\n\n{str(e)}")
+        # Usa traduzioni italiane come fallback per errori critici
+        t = get_translations('it')
+        messagebox.showerror(t.error_critical, 
+                           f"{t.error_cannot_start}{str(e)}")
         sys.exit(1)
 
 if __name__ == "__main__":
