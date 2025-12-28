@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
 """
-Finestra di aiuto per ISBN Matcher
+Finestra di aiuto per ISBN Matcher con supporto multilingua
 """
 import tkinter as tk
 from tkinter import scrolledtext
+from localization import Translations
 
 
-def mostra_aiuto(parent):
+def mostra_aiuto(parent, t: Translations):
     """
     Mostra la finestra di aiuto con la guida utente.
     
     Args:
         parent: Finestra principale dell'applicazione
+        t: Oggetto Translations con le traduzioni
     """
     help_window = tk.Toplevel(parent)
-    help_window.title("Aiuto - ISBN Matcher")
+    help_window.title(t.help_title)
     help_window.geometry("600x500")
     help_window.transient(parent)
     help_window.grab_set()
@@ -24,7 +26,7 @@ def mostra_aiuto(parent):
     header.pack(fill=tk.X)
     header.pack_propagate(False)
     
-    tk.Label(header, text="❓ Guida Rapida", 
+    tk.Label(header, text=t.help_title, 
             font=("Arial", 18, "bold"),
             bg="#2563eb", fg="white").pack(pady=15)
     
@@ -40,61 +42,34 @@ def mostra_aiuto(parent):
                                     wrap=tk.WORD)
     text.pack(fill=tk.BOTH, expand=True)
     
-    help_text = """📚 COSA FA QUESTA APP
+    help_text = f"""{t.help_what_does}
 
-Confronta una lista di ISBN (worklist) con altri file Excel e trova:
-• Corrispondenze: ISBN presenti in entrambi
-• Non corrispondenze: ISBN della worklist mancanti negli altri file
+{t.help_what_does_content}
 
 
-🎯 COME USARE
+{t.help_how_to_use}
 
-1. SCEGLI LA MODALITÀ
-   ✅ Corrispondenze: trova ISBN comuni
-   ❌ Non corrispondenze: trova ISBN mancanti
-
-2. CARICA I FILE
-   • Il PRIMO file è la worklist (lista di riferimento)
-   • Aggiungi altri file da confrontare
-   • Puoi trascinare i file nella finestra (drag & drop)
-
-3. ELABORA
-   • Clicca "⚡ ELABORA FILE"
-   • Attendi il completamento
-   • Clicca "📂 APRI OUTPUT" per vedere il risultato
+{t.help_how_to_use_content}
 
 
-⚙️ FORMATTAZIONE OUTPUT
+{t.help_output_format}
 
-Il file Excel generato include:
-• Header abbreviati (Sez, Spec, Seq...)
-• Larghezze colonne ottimizzate
-• Intestazione con sfondo azzurro
-• Prima riga bloccata (freeze panes)
-• Zoom al 110%
+{t.help_output_format_content}
 
 
-💡 SUGGERIMENTI
+{t.help_tips}
 
-• La worklist può avere più fogli: verranno uniti automaticamente
-• I duplicati nella worklist vengono rimossi automaticamente
-• Il foglio "parametri" viene sempre ignorato
-• Puoi riordinare i file con i pulsanti ⬆️ ⬇️
+{t.help_tips_content}
 
 
-🔍 COLONNE ISBN RICONOSCIUTE
+{t.help_isbn_columns}
 
-L'app riconosce automaticamente colonne con nomi come:
-• ISBN, Codice ISBN, Cod. ISBN
-• EAN, Codice EAN
-• Codice, Barcode
+{t.help_isbn_columns_content}
 
 
-❌ RISOLUZIONE PROBLEMI
+{t.help_troubleshooting}
 
-• Se il file non si apre: chiudi Excel e riprova
-• Se non trova ISBN: verifica che il nome colonna sia corretto
-• Per problemi: controlla il log nella sezione "📋 Log Attività"
+{t.help_troubleshooting_content}
 """
     
     text.insert(1.0, help_text)
@@ -104,7 +79,7 @@ L'app riconosce automaticamente colonne con nomi come:
     btn_frame = tk.Frame(help_window, bg="white", pady=10)
     btn_frame.pack(fill=tk.X)
     
-    close_btn = tk.Button(btn_frame, text="Chiudi",
+    close_btn = tk.Button(btn_frame, text=t.btn_close,
                          command=help_window.destroy,
                          bg="#2563eb", fg="white",
                          font=("Arial", 10, "bold"),
