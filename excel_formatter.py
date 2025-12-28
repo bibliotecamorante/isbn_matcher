@@ -2,6 +2,7 @@
 """
 excel_formatter.py - Formattazione file Excel output
 Applica lo stile dell'app Sebina Plus: colori, larghezze, altezze
+Aggiornato per supportare localizzazione
 """
 from pathlib import Path
 from openpyxl import load_workbook
@@ -9,13 +10,15 @@ from openpyxl.styles import PatternFill, Alignment, Font, NamedStyle
 from openpyxl.utils import get_column_letter
 from typing import Callable, Optional
 from config import AppConfig
+from localization import Translations
 
 
 def formatta_excel_isbn(
     filepath: Path,
     config: AppConfig,
     log_callback: Callable[[str, str], None],
-    progress_callback: Optional[Callable[[int, int], None]] = None
+    progress_callback: Optional[Callable[[int, int], None]] = None,
+    t: Optional[Translations] = None
 ) -> None:
     """
     Formatta il file Excel di output con lo stile Sebina Plus.
@@ -33,8 +36,10 @@ def formatta_excel_isbn(
         config: Configurazione applicazione
         log_callback: Funzione per logging (message, level)
         progress_callback: Funzione per progress bar (current, total)
+        t: Traduzioni (opzionale)
     """
-    log_callback("Avvio formattazione Excel...", "INFO")
+    start_msg = t.proc_applying_format if t else "Avvio formattazione Excel..."
+    log_callback(start_msg, "INFO")
     
     try:
         wb = load_workbook(str(filepath))
@@ -46,7 +51,8 @@ def formatta_excel_isbn(
             if ws.title.lower() == config.SHEET_PARAMETRI:
                 continue
             
-            log_callback(f"  Formattazione foglio: {ws.title}", "INFO")
+            sheet_msg = f"  {t.proc_formatting_sheet if t else 'Formattazione foglio'}: {ws.title}"
+            log_callback(sheet_msg, "INFO")
             
             # Setup pagina
             _setup_pagina(ws, config)
@@ -72,17 +78,22 @@ def formatta_excel_isbn(
         if progress_callback:
             progress_callback(100, 100)
         
-        log_callback(f"Salvataggio formattazione...", "INFO")
+        save_msg = t.proc_saving_format if t else "Salvataggio formattazione..."
+        log_callback(save_msg, "INFO")
         wb.save(str(filepath))
-        log_callback("✅ Formattazione completata", "SUCCESS")
+        
+        complete_msg = t.proc_format_complete if t else "✅ Formattazione completata"
+        log_callback(complete_msg, "SUCCESS")
         
     except PermissionError:
-        raise PermissionError(
-            f"Il file '{filepath.name}' è aperto in Excel.\n"
-            f"Chiudilo e riprova l'operazione."
-        )
+        if t:
+            error_msg = t.error_file_open_excel.format(filename=filepath.name)
+        else:
+            error_msg = f"Il file '{filepath.name}' è aperto in Excel.\nChiudilo e riprova l'operazione."
+        raise PermissionError(error_msg)
     except Exception as e:
-        log_callback(f"❌ Errore formattazione: {str(e)}", "ERROR")
+        error_msg = f"{t.error_formatting if t else '❌ Errore formattazione'}: {str(e)}"
+        log_callback(error_msg, "ERROR")
         raise
 
 
